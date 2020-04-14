@@ -1,3 +1,8 @@
+.DS_Store
+
+# project specific
+threejs/jsm/models/FBX2glTF
+
 # Logs
 logs
 *.log

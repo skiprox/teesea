@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - panorama</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<link type="text/css" rel="stylesheet" href="main.css">
+	</head>
+	<body>
+		<div id="container"></div>
+
+		<script type="module">
+
+			import * as THREE from '../build/three.module.js';
+
+			import { OrbitControls } from '../jsm/controls/OrbitControls.js';
+
+			import { GLTFLoader } from '../jsm/loaders/GLTFLoader.js';
+
+			var camera, controls;
+			var renderer;
+			var scene;
+
+			init();
+			// animate();
+
+			function init() {
+				var container = document.getElementById( 'container' );
+
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
+				camera.position.set( - 1.8, 0.6, 2.7 );
+
+				scene = new THREE.Scene();
+
+				// Instantiate a loader
+				var loader = new GLTFLoader();
+
+				// Load a glTF resource
+				loader.load(
+					// resource URL
+					'../jsm/models/barn_1_out/barn_1.gltf',
+					// called when the resource is loaded
+					function ( gltf ) {
+						var object = gltf.scene;
+						// This turns it into wireframe
+						object.traverse((node) => {
+							if (!node.isMesh) return;
+							node.material.wireframe = true;
+						});
+						// Setting the scale
+						object.scale.x = 0.01;
+						object.scale.y = 0.01;
+						object.scale.z = 0.01;
+						console.log(object);
+						scene.add( object );
+						animate();
+					},
+					// called while loading is progressing
+					function ( xhr ) {
+						console.log(xhr);
+						console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+					},
+					// called when loading has errors
+					function ( error ) {
+						console.log( 'An error happened' );
+					}
+				);
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.toneMapping = THREE.ACESFilmicToneMapping;
+				renderer.toneMappingExposure = 0.8;
+				renderer.outputEncoding = THREE.sRGBEncoding;
+				container.appendChild( renderer.domElement );
+
+				controls = new OrbitControls( camera, renderer.domElement );
+				controls.enableZoom = true;
+				controls.enablePan = true;
+				controls.enableDamping = true;
+				controls.rotateSpeed = - 0.25;
+
+				// lights
+				var light = new THREE.AmbientLight( 0xffffff ); // soft white light
+				scene.add( light );
+
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			function animate() {
+				requestAnimationFrame( animate );
+				controls.update(); // required when damping is enabled
+				renderer.render( scene, camera );
+			}
+
+		</script>
+	</body>
+</html>
