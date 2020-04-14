@@ -1,0 +1,20 @@
+{
+  "name": "webpack-build",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "NODE_ENV=production webpack",
+    "dev": "NODE_ENV=development webpack-dev-server"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "^7.9.5",
+    "babel-loader": "^8.1.0",
+    "dat.gui": "^0.7.7",
+    "three": "^0.115.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}

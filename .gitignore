@@ -4,6 +4,8 @@
 threejs/jsm/models/FBX2glTF
 webpack-build/dist/*.hot-update.json
 webpack-build/dist/*.hot-update.js
+*.hot-update.json
+*.hot-update.js
 
 # Logs
 logs
