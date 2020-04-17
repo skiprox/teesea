@@ -10,9 +10,13 @@ import * as dat from 'dat.gui'
 // CONTROLS
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
+// Model loader
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+
 // COMPONENTS
 import Camera from 'Components/Camera'
 import Renderer from 'Components/Renderer'
+import Light from 'Components/Light'
 
 // OBJECTS
 import Ball from 'Objects/Ball'
@@ -38,6 +42,7 @@ global.renderer = new Renderer({
   alpha: true,
   clearColor: 0xfcfcfc
 })
+global.light = new Light()
 global.scene = new THREE.Scene()
 
 let time = 0
@@ -75,6 +80,9 @@ let cube = new Cube({
   resolution: 50
 })
 
+// Instantiate a loader
+var loader = new GLTFLoader()
+
 /* -------- START -------- */
 const init = () => {
   // --- add renderer to container ---
@@ -86,16 +94,45 @@ const init = () => {
   // --- add objects to scene ---
   scene.add(ball)
   scene.add(cube)
+  scene.add(light)
 
-  global.controls = new OrbitControls( global.camera, global.renderer.domElement );
-  global.controls.enableZoom = true;
-  global.controls.enablePan = true;
-  global.controls.enableDamping = true;
-  global.controls.rotateSpeed = - 0.25;
+  global.controls = new OrbitControls( global.camera, global.renderer.domElement )
+  global.controls.enableZoom = true
+  global.controls.enablePan = true
+  global.controls.enableDamping = true
+  global.controls.rotateSpeed = - 0.25
 
-  // --- set up composer ---
-  // composer.addPass(renderPass)
-  // composer.addPass(shaderPass)
+  // Load a glTF resource
+  loader.load(
+    // resource URL
+    './models/barn_1.gltf',
+    // called when the resource is loaded
+    function ( gltf ) {
+      var object = gltf.scene
+      // This turns it into wireframe
+      object.traverse((node) => {
+        if (!node.isMesh) return
+        node.material.wireframe = true
+      })
+      // Setting the scale
+      // object.scale.x = 0.1
+      // object.scale.y = 0.1
+      // object.scale.z = 0.1
+      object.position.y = -10
+      console.log(object)
+      scene.add( object )
+      loop()
+    },
+    // called while loading is progressing
+    function ( xhr ) {
+      console.log(xhr)
+      console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
+    },
+    // called when loading has errors
+    function ( error ) {
+      console.log( 'An error happened' )
+    }
+  )
 }
 init()
 
@@ -124,7 +161,7 @@ const loop = () => {
   // composer.render()
   requestAnimationFrame(loop)
 }
-loop()
+// loop()
 
 /* -------- WINDOW RESIZE -------- */
 window.addEventListener('resize', () => {

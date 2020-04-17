@@ -1,3 +1,4 @@
+import * as THREE from 'three'
 import { WebGLRenderer } from 'three'
 
 export default class Renderer extends WebGLRenderer {
@@ -10,5 +11,8 @@ export default class Renderer extends WebGLRenderer {
     this.setSize(window.innerWidth, window.innerHeight)
     this.setClearColor(clearColor, 1.0)
     this.setClearAlpha(1.0)
+    this.toneMapping = THREE.ACESFilmicToneMapping
+    this.toneMappingExposure = 0.8
+    this.outputEncoding = THREE.sRGBEncoding
   }
 }
