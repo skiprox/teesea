@@ -1,10 +1,10 @@
 import { Mesh, BoxBufferGeometry, MeshNormalMaterial } from 'three'
-import { ExampleShader } from 'Shaders'
+import { GradientShader } from 'Shaders'
 
 export default class Cube extends Mesh {
 	constructor({ size = 10, resolution = 50 } = {}) {
-		// bind our ExampleShader to a variable
-		let shader = ExampleShader
+		// bind our GradientShader to a variable
+		let shader = GradientShader
 
 		let geo = new BoxBufferGeometry(size, size, size, resolution, resolution)
 		let mat = new MeshNormalMaterial()
@@ -28,9 +28,9 @@ export default class Cube extends Mesh {
 		u_resolution = [window.innerWidth, window.innerHeight],
 		u_amp = 0,
 		u_time = 0,
-		x = 10,
+		x = 20,
 		y = 0,
-		z = 0
+		z = 10
 	} = {}) {
 		let { uniforms } = this.shader
 		if (u_resolution) uniforms['u_resolution'].value = u_resolution

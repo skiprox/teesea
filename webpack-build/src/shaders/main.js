@@ -1,4 +1,5 @@
 import { ExampleShader } from './exampleShader/config'
+import { GradientShader } from './GradientShader/config'
 import { EffectShader } from './effectShader/config'
 import { RGBShift } from './rgbShift/config'
 
@@ -9,4 +10,4 @@ import { RGBShift } from './rgbShift/config'
 
 */
 
-export { ExampleShader, EffectShader, RGBShift }
+export { ExampleShader, GradientShader, EffectShader, RGBShift }
