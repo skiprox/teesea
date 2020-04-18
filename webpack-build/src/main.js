@@ -22,6 +22,9 @@ import Light from 'Components/Light'
 import Ball from 'Objects/Ball'
 import Cube from 'Objects/Cube'
 
+// OBJECTS
+import StandardModel from 'Models/StandardModel'
+
 // EFFECTS
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
@@ -81,8 +84,19 @@ let cube = new Cube({
 })
 
 /* -------- CREATE MODELS -------- */
-let myModel = new Model({
-  filename: './models/whatever.gltf'
+let tinybarn = new StandardModel({
+  filename: './models/barn_1.gltf',
+  pos: {
+    x: 0,
+    y: 0,
+    z: 0
+  },
+  scale: {
+    x: 0.3,
+    y: 0.3,
+    z: 0.3
+  },
+  wireframe: true
 })
 
 // Instantiate a loader
@@ -110,18 +124,24 @@ const init = () => {
   global.controls.rotateSpeed = - 0.25
 
   // load a model!
-  loader.load(myModel.filename, function(gltf) {
+  loader.load(tinybarn.filename, function(gltf) {
     var object = gltf.scene
     object.traverse((node) => {
       if (!node.isMesh) return
-      node.material.wireframe = true
+      node.material.wireframe = tinybarn.wireframe
     })
+    object.scale.x = tinybarn.scale.x
+    object.scale.y = tinybarn.scale.x
+    object.scale.z = tinybarn.scale.x
+    object.position.x = tinybarn.pos.x
+    object.position.y = tinybarn.pos.x
+    object.position.z = tinybarn.pos.x
     scene.add(object)
-  }, function() {
+  }, function(xhr) {
     console.log(xhr)
     console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
-  }, function() {
-    console.log( 'An error happened' )
+  }, function(error) {
+    console.log('An error happened', error)
   })
 
   // Load a glTF resource
@@ -141,16 +161,16 @@ const init = () => {
       // object.scale.y = 0.1
       // object.scale.z = 0.1
       object.position.y = -10
-      scene.add( object )
+      scene.add(object)
     },
     // called while loading is progressing
     function ( xhr ) {
       console.log(xhr)
-      console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
+      console.log((xhr.loaded / xhr.total * 100 ) + '% loaded')
     },
     // called when loading has errors
     function ( error ) {
-      console.log( 'An error happened' )
+      console.log('An error happened')
     }
   )
 }
