@@ -80,6 +80,11 @@ let cube = new Cube({
   resolution: 50
 })
 
+/* -------- CREATE MODELS -------- */
+let myModel = new Model({
+  filename: './models/whatever.gltf'
+})
+
 // Instantiate a loader
 var loader = new GLTFLoader()
 
@@ -91,16 +96,33 @@ const init = () => {
   // --- add stats to container---
   container.appendChild(stats.dom)
 
+  // --- add the light ---
+  scene.add(light)
+
   // --- add objects to scene ---
   scene.add(ball)
   scene.add(cube)
-  scene.add(light)
 
   global.controls = new OrbitControls( global.camera, global.renderer.domElement )
   global.controls.enableZoom = true
   global.controls.enablePan = true
   global.controls.enableDamping = true
   global.controls.rotateSpeed = - 0.25
+
+  // load a model!
+  loader.load(myModel.filename, function(gltf) {
+    var object = gltf.scene
+    object.traverse((node) => {
+      if (!node.isMesh) return
+      node.material.wireframe = true
+    })
+    scene.add(object)
+  }, function() {
+    console.log(xhr)
+    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
+  }, function() {
+    console.log( 'An error happened' )
+  })
 
   // Load a glTF resource
   loader.load(
@@ -119,9 +141,7 @@ const init = () => {
       // object.scale.y = 0.1
       // object.scale.z = 0.1
       object.position.y = -10
-      console.log(object)
       scene.add( object )
-      loop()
     },
     // called while loading is progressing
     function ( xhr ) {
@@ -161,7 +181,7 @@ const loop = () => {
   // composer.render()
   requestAnimationFrame(loop)
 }
-// loop()
+loop()
 
 /* -------- WINDOW RESIZE -------- */
 window.addEventListener('resize', () => {
