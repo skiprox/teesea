@@ -85,7 +85,7 @@ let cube = new Cube({
 
 /* -------- CREATE MODELS -------- */
 let tinybarn = new StandardModel({
-  filename: './models/barn_1.gltf',
+  filename: './models/barn/barn_1.gltf',
   pos: {
     x: 0,
     y: 0,
@@ -95,6 +95,21 @@ let tinybarn = new StandardModel({
     x: 0.3,
     y: 0.3,
     z: 0.3
+  },
+  wireframe: true
+})
+
+let greenhouse = new StandardModel({
+  filename: './models/greenhouse/greenhousse2.gltf',
+  pos: {
+    x: 100,
+    y: 0,
+    z: 100
+  },
+  scale: {
+    x: 5.5,
+    y: 5.5,
+    z: 5.5
   },
   wireframe: true
 })
@@ -131,11 +146,31 @@ const init = () => {
       node.material.wireframe = tinybarn.wireframe
     })
     object.scale.x = tinybarn.scale.x
-    object.scale.y = tinybarn.scale.x
-    object.scale.z = tinybarn.scale.x
+    object.scale.y = tinybarn.scale.y
+    object.scale.z = tinybarn.scale.z
     object.position.x = tinybarn.pos.x
-    object.position.y = tinybarn.pos.x
-    object.position.z = tinybarn.pos.x
+    object.position.y = tinybarn.pos.y
+    object.position.z = tinybarn.pos.z
+    scene.add(object)
+  }, function(xhr) {
+    console.log(xhr)
+    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
+  }, function(error) {
+    console.log('An error happened', error)
+  })
+
+  loader.load(greenhouse.filename, function(gltf) {
+    var object = gltf.scene
+    object.traverse((node) => {
+      if (!node.isMesh) return
+      node.material.wireframe = greenhouse.wireframe
+    })
+    object.scale.x = greenhouse.scale.x
+    object.scale.y = greenhouse.scale.y
+    object.scale.z = greenhouse.scale.z
+    object.position.x = greenhouse.pos.x
+    object.position.y = greenhouse.pos.y
+    object.position.z = greenhouse.pos.z
     scene.add(object)
   }, function(xhr) {
     console.log(xhr)
@@ -145,34 +180,25 @@ const init = () => {
   })
 
   // Load a glTF resource
-  loader.load(
-    // resource URL
-    './models/barn_1.gltf',
-    // called when the resource is loaded
-    function ( gltf ) {
-      var object = gltf.scene
-      // This turns it into wireframe
-      object.traverse((node) => {
-        if (!node.isMesh) return
-        node.material.wireframe = true
-      })
-      // Setting the scale
-      // object.scale.x = 0.1
-      // object.scale.y = 0.1
-      // object.scale.z = 0.1
-      object.position.y = -10
-      scene.add(object)
-    },
-    // called while loading is progressing
-    function ( xhr ) {
-      console.log(xhr)
-      console.log((xhr.loaded / xhr.total * 100 ) + '% loaded')
-    },
-    // called when loading has errors
-    function ( error ) {
-      console.log('An error happened')
-    }
-  )
+  loader.load('./models/barn/barn_1.gltf', function ( gltf ) {
+    var object = gltf.scene
+    // This turns it into wireframe
+    object.traverse((node) => {
+      if (!node.isMesh) return
+      node.material.wireframe = true
+    })
+    object.position.y = -10
+    scene.add(object)
+  },
+  // called while loading is progressing
+  function ( xhr ) {
+    console.log(xhr)
+    console.log((xhr.loaded / xhr.total * 100 ) + '% loaded')
+  },
+  // called when loading has errors
+  function ( error ) {
+    console.log('An error happened')
+  })
 }
 init()
 
