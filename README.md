@@ -5,7 +5,10 @@
 to start some stuff, run:
 
 ```
-serve .
+npm run dev
 ```
+in the webpack-build directory.
 
-in this directory
+:sparkles:
+![cow](threejs/examples/textures/cow.png)
+

@@ -114,6 +114,41 @@ let greenhouse = new StandardModel({
   wireframe: true
 })
 
+let cowhead = new StandardModel({
+  filename:'./models/cow/bakedcowpie.gltf',
+  pos: {
+    x:50,
+    y:20,
+    z:0
+
+  },
+  scale: {
+    x: 7,
+    y: 7,
+    z: 7
+  },
+  wireframe: false
+})
+
+let mootext = new StandardModel({
+  filename:'./models/mootext/mootext.gltf',
+  pos: {
+    x:0,
+    y:0,
+    z:0
+  },
+
+  scale: {
+  x:10,
+  y:10,
+  z:10,
+
+  },
+
+  wireframe: false
+
+})
+
 // Instantiate a loader
 var loader = new GLTFLoader()
 
@@ -179,6 +214,47 @@ const init = () => {
     console.log('An error happened', error)
   })
 
+  loader.load(cowhead.filename, function(gltf) {
+    var object = gltf.scene
+    object.traverse((node) => {
+      if (!node.isMesh) return
+      node.material.wireframe = cowhead.wireframe
+    })
+    object.scale.x = cowhead.scale.x
+    object.scale.y = cowhead.scale.y
+    object.scale.z = cowhead.scale.z
+    object.position.x = cowhead.pos.x
+    object.position.y = cowhead.pos.y
+    object.position.z = cowhead.pos.z
+    scene.add(object)
+  }, function(xhr) {
+    console.log(xhr)
+    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
+  }, function(error) {
+    console.log('An error happened', error)
+  })
+
+  loader.load(mootext.filename, function(gltf) {
+    var object = gltf.scene
+    object.traverse((node) => {
+      if (!node.isMesh) return
+      node.material.wireframe = mootext.wireframe
+    })
+    object.scale.x = mootext.scale.x
+    object.scale.y = mootext.scale.y
+    object.scale.z = mootext.scale.z
+    object.position.x = mootext.pos.x
+    object.position.y = mootext.pos.y
+    object.position.z = mootext.pos.z
+    scene.add(object)
+  }, function(xhr) {
+    console.log(xhr)
+    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
+  }, function(error) {
+    console.log('An error happened', error)
+  })
+
+
   // Load a glTF resource
   loader.load('./models/barn/barn_1.gltf', function ( gltf ) {
     var object = gltf.scene
@@ -199,6 +275,10 @@ const init = () => {
   function ( error ) {
     console.log('An error happened')
   })
+
+  {
+
+}
 }
 init()
 
