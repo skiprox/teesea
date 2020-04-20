@@ -22,7 +22,7 @@ import Light from 'Components/Light'
 import Ball from 'Objects/Ball'
 import Cube from 'Objects/Cube'
 
-// OBJECTS
+// MODELS
 import StandardModel from 'Models/StandardModel'
 
 // EFFECTS
@@ -111,7 +111,7 @@ let greenhouse = new StandardModel({
     y: 5.5,
     z: 5.5
   },
-  wireframe: true
+  wireframe: false
 })
 
 let cowhead = new StandardModel({
@@ -138,11 +138,26 @@ let mootext = new StandardModel({
     z:0
   },
   scale: {
-    x:10,
-    y:10,
-    z:10
+    x:2,
+    y:2,
+    z:2
   },
-  wireframe: true
+  wireframe: false
+})
+
+let cooler = new StandardModel({
+  filename: './models/cooler/cooler.gltf',
+  pos: {
+    x: -80,
+    y: 10,
+    z: -30
+  },
+  scale: {
+    x: 40,
+    y: 40,
+    z: 40
+  },
+  wireframe: false
 })
 
 // Instantiate a loader
@@ -174,6 +189,7 @@ const init = () => {
   greenhouse.load()
   cowhead.load()
   barn.load()
+  cooler.load()
   // mootext.load()
 
 }

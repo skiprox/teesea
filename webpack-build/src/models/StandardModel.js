@@ -18,10 +18,9 @@ export default class StandardModel {
     var loader = new GLTFLoader()
     loader.load(this.filename, (gltf) => {
       var object = gltf.scene
-      console.log(object, this)
       object.traverse((node) => {
         if (!node.isMesh) return
-        node.material.wireframe = true
+        node.material.wireframe = this.wireframe
       })
       object.scale.x = this.scale.x
       object.scale.y = this.scale.y
