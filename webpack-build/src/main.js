@@ -84,7 +84,7 @@ let cube = new Cube({
 })
 
 /* -------- CREATE MODELS -------- */
-let tinybarn = new StandardModel({
+let barn = new StandardModel({
   filename: './models/barn/barn_1.gltf',
   pos: {
     x: 0,
@@ -92,9 +92,9 @@ let tinybarn = new StandardModel({
     z: 0
   },
   scale: {
-    x: 0.3,
-    y: 0.3,
-    z: 0.3
+    x: 2.0,
+    y: 2.0,
+    z: 2.0
   },
   wireframe: true
 })
@@ -137,16 +137,12 @@ let mootext = new StandardModel({
     y:0,
     z:0
   },
-
   scale: {
-  x:10,
-  y:10,
-  z:10,
-
+    x:10,
+    y:10,
+    z:10
   },
-
-  wireframe: false
-
+  wireframe: true
 })
 
 // Instantiate a loader
@@ -167,118 +163,19 @@ const init = () => {
   scene.add(ball)
   scene.add(cube)
 
+  // --- add camera controls to scene ---
   global.controls = new OrbitControls( global.camera, global.renderer.domElement )
   global.controls.enableZoom = true
   global.controls.enablePan = true
   global.controls.enableDamping = true
   global.controls.rotateSpeed = - 0.25
 
-  // load a model!
-  loader.load(tinybarn.filename, function(gltf) {
-    var object = gltf.scene
-    object.traverse((node) => {
-      if (!node.isMesh) return
-      node.material.wireframe = tinybarn.wireframe
-    })
-    object.scale.x = tinybarn.scale.x
-    object.scale.y = tinybarn.scale.y
-    object.scale.z = tinybarn.scale.z
-    object.position.x = tinybarn.pos.x
-    object.position.y = tinybarn.pos.y
-    object.position.z = tinybarn.pos.z
-    scene.add(object)
-  }, function(xhr) {
-    console.log(xhr)
-    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
-  }, function(error) {
-    console.log('An error happened', error)
-  })
+  // --- add models to scene ---
+  greenhouse.load()
+  cowhead.load()
+  barn.load()
+  // mootext.load()
 
-  loader.load(greenhouse.filename, function(gltf) {
-    var object = gltf.scene
-    object.traverse((node) => {
-      if (!node.isMesh) return
-      node.material.wireframe = greenhouse.wireframe
-    })
-    object.scale.x = greenhouse.scale.x
-    object.scale.y = greenhouse.scale.y
-    object.scale.z = greenhouse.scale.z
-    object.position.x = greenhouse.pos.x
-    object.position.y = greenhouse.pos.y
-    object.position.z = greenhouse.pos.z
-    scene.add(object)
-  }, function(xhr) {
-    console.log(xhr)
-    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
-  }, function(error) {
-    console.log('An error happened', error)
-  })
-
-  loader.load(cowhead.filename, function(gltf) {
-    var object = gltf.scene
-    object.traverse((node) => {
-      if (!node.isMesh) return
-      node.material.wireframe = cowhead.wireframe
-    })
-    object.scale.x = cowhead.scale.x
-    object.scale.y = cowhead.scale.y
-    object.scale.z = cowhead.scale.z
-    object.position.x = cowhead.pos.x
-    object.position.y = cowhead.pos.y
-    object.position.z = cowhead.pos.z
-    scene.add(object)
-  }, function(xhr) {
-    console.log(xhr)
-    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
-  }, function(error) {
-    console.log('An error happened', error)
-  })
-
-  loader.load(mootext.filename, function(gltf) {
-    var object = gltf.scene
-    object.traverse((node) => {
-      if (!node.isMesh) return
-      node.material.wireframe = mootext.wireframe
-    })
-    object.scale.x = mootext.scale.x
-    object.scale.y = mootext.scale.y
-    object.scale.z = mootext.scale.z
-    object.position.x = mootext.pos.x
-    object.position.y = mootext.pos.y
-    object.position.z = mootext.pos.z
-    scene.add(object)
-  }, function(xhr) {
-    console.log(xhr)
-    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
-  }, function(error) {
-    console.log('An error happened', error)
-  })
-
-
-  // Load a glTF resource
-  loader.load('./models/barn/barn_1.gltf', function ( gltf ) {
-    var object = gltf.scene
-    // This turns it into wireframe
-    object.traverse((node) => {
-      if (!node.isMesh) return
-      node.material.wireframe = true
-    })
-    object.position.y = -10
-    scene.add(object)
-  },
-  // called while loading is progressing
-  function ( xhr ) {
-    console.log(xhr)
-    console.log((xhr.loaded / xhr.total * 100 ) + '% loaded')
-  },
-  // called when loading has errors
-  function ( error ) {
-    console.log('An error happened')
-  })
-
-  {
-
-}
 }
 init()
 

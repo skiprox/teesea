@@ -11,29 +11,30 @@ export default class StandardModel {
     this.pos = pos
     this.scale = scale
     this.wireframe = wireframe
+    super.load = this.load
   }
-  // load() {
-  //   // Instantiate a loader
-  //   var loader = new GLTFLoader()
-  //   console.log('what the fuck', this)
-  //   loader.load(this.filename, function(gltf) {
-  //     var object = gltf.scene
-  //     object.traverse((node) => {
-  //       if (!node.isMesh) return
-  //       node.material.wireframe = true
-  //     })
-  //     object.scale.x = this.scale.x
-  //     object.scale.y = this.scale.x
-  //     object.scale.z = this.scale.x
-  //     object.position.x = this.pos.x
-  //     object.position.y = this.pos.x
-  //     object.position.z = this.pos.x
-  //     scene.add(object)
-  //   }, function(xhr) {
-  //     console.log(xhr)
-  //     console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
-  //   }, function(error) {
-  //     console.log('An error happened', error)
-  //   })
-  // }
+  load() {
+    // Instantiate a loader
+    var loader = new GLTFLoader()
+    loader.load(this.filename, (gltf) => {
+      var object = gltf.scene
+      console.log(object, this)
+      object.traverse((node) => {
+        if (!node.isMesh) return
+        node.material.wireframe = true
+      })
+      object.scale.x = this.scale.x
+      object.scale.y = this.scale.y
+      object.scale.z = this.scale.z
+      object.position.x = this.pos.x
+      object.position.y = this.pos.y
+      object.position.z = this.pos.z
+      scene.add(object)
+    }, function(xhr) {
+      console.log(xhr)
+      console.log((xhr.loaded / xhr.total * 100 ) + '% loaded')
+    }, function(error) {
+      console.log('An error happened', error)
+    })
+  }
 }
