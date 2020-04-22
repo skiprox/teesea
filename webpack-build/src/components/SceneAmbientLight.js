@@ -1,6 +1,6 @@
 import { AmbientLight } from 'three'
 
-export default class Light extends AmbientLight {
+export default class SceneAmbientLight extends AmbientLight {
   constructor() {
     super(0xffffff)
   }
