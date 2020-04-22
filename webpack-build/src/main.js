@@ -191,7 +191,6 @@ const init = () => {
   barn.load()
   cooler.load()
   // mootext.load()
-
 }
 init()
 
