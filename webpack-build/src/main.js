@@ -16,7 +16,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 // COMPONENTS
 import Camera from 'Components/Camera'
 import Renderer from 'Components/Renderer'
-import Light from 'Components/Light'
+import SceneAmbientLight from 'Components/SceneAmbientLight'
+import SceneSpotLight from 'Components/SceneSpotLight'
 
 // OBJECTS
 import Ball from 'Objects/Ball'
@@ -45,7 +46,11 @@ global.renderer = new Renderer({
   alpha: true,
   clearColor: 0xfcfcfc
 })
-global.light = new Light()
+global.ambientLight = new SceneAmbientLight()
+global.spotLightRed = new SceneSpotLight(0xff4422, {x: 100, y: 100, z: 100})
+global.spotLightBlue = new SceneSpotLight(0x2244ff, {x: -100, y: 100, z: -100})
+global.spotLightGreen = new SceneSpotLight(0x22ff44, {x: 100, y: 100, z: -100})
+global.spotLightYellow = new SceneSpotLight(0xffff22, {x: -100, y: 100, z: 100})
 global.scene = new THREE.Scene()
 
 let time = 0
@@ -172,7 +177,10 @@ const init = () => {
   container.appendChild(stats.dom)
 
   // --- add the light ---
-  scene.add(light)
+  scene.add(ambientLight)
+  scene.add(spotLightRed)
+  scene.add(spotLightBlue)
+  scene.add(spotLightGreen)
 
   // --- add objects to scene ---
   scene.add(ball)
@@ -191,6 +199,8 @@ const init = () => {
   barn.load()
   cooler.load()
   // mootext.load()
+
+  mootext.load()
 }
 init()
 
