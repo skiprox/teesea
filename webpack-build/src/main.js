@@ -10,9 +10,6 @@ import * as dat from 'dat.gui'
 // CONTROLS
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
-// Model loader
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-
 // COMPONENTS
 import Camera from 'Components/Camera'
 import Renderer from 'Components/Renderer'
@@ -33,25 +30,28 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
 
 import { EffectShader } from 'Shaders'
 
+/* ------- GLOBAL VARIABLES --------*/
+global.mouse = new THREE.Vector2()
+
 /* -------- SET UP -------- */
 const container = document.querySelector('#app')
+global.scene = new THREE.Scene()
 
-/*
-   to use variables in the browser console,
-   bind them to a "global" object which makes debugging easier
-*/
+/* -------- CAMERA, RENDERER, RAYCASTER -------- */
+global.raycaster = new THREE.Raycaster()
 global.camera = new Camera()
 global.renderer = new Renderer({
   antialias: true,
   alpha: true,
   clearColor: 0xfcfcfc
 })
+
+/* -------- LIGHTING -------- */
 global.ambientLight = new SceneAmbientLight()
 global.spotLightRed = new SceneSpotLight(0xff4422, {x: 100, y: 100, z: 100})
 global.spotLightBlue = new SceneSpotLight(0x2244ff, {x: -100, y: 100, z: -100})
 global.spotLightGreen = new SceneSpotLight(0x22ff44, {x: 100, y: 100, z: -100})
 global.spotLightYellow = new SceneSpotLight(0xffff22, {x: -100, y: 100, z: 100})
-global.scene = new THREE.Scene()
 
 let time = 0
 
@@ -89,6 +89,7 @@ let cube = new Cube({
 })
 
 /* -------- CREATE MODELS -------- */
+global.models = []
 let barn = new StandardModel({
   filename: './models/barn/barn_1.gltf',
   pos: {
@@ -165,8 +166,17 @@ let cooler = new StandardModel({
   wireframe: false
 })
 
-// Instantiate a loader
-var loader = new GLTFLoader()
+/* ------ TRACK THE MOUSE ------ */
+const onClick = (e) => {
+  mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1
+  mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1
+  // find intersections
+  raycaster.setFromCamera(mouse, camera)
+  let intersects = raycaster.intersectObjects(scene.children, true)
+  if (intersects.length > 0) {
+    console.log('we have intersected', intersects[0].object)
+  }
+}
 
 /* -------- START -------- */
 const init = () => {
@@ -198,9 +208,15 @@ const init = () => {
   cowhead.load()
   barn.load()
   cooler.load()
-  // mootext.load()
-
   mootext.load()
+  models.push(greenhouse)
+  models.push(cowhead)
+  models.push(barn)
+  models.push(cooler)
+  models.push(mootext)
+
+  // --- add listeners ---
+  container.addEventListener('click', onClick, false)
 }
 init()
 
@@ -216,9 +232,6 @@ const loop = () => {
     u_amp: params.noiseStrength,
     u_time: time
   })
-
-  // update shaderPass uniforms
-  // shaderPass.uniforms['u_time'].value += 0.1
 
   // --- UPDATE TIME & STATS --
   time += 0.1
