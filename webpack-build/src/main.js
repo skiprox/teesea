@@ -198,8 +198,9 @@ const init = () => {
   cowhead.load()
   barn.load()
   cooler.load()
-  mootext.load()
+  // mootext.load()
 
+  mootext.load()
 }
 init()
 
