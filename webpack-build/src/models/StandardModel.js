@@ -5,12 +5,14 @@ export default class StandardModel {
     filename,
     pos = {x: 0, y: 0, z: 0},
     scale = {x: 1, y: 1, z: 1},
-    wireframe =  true
+    wireframe =  true,
+    userData = {}
   } = {}) {
     this.filename = filename
     this.pos = pos
     this.scale = scale
     this.wireframe = wireframe
+    this.userData = userData
     super.load = this.load
   }
   load() {
@@ -28,6 +30,7 @@ export default class StandardModel {
       object.position.x = this.pos.x
       object.position.y = this.pos.y
       object.position.z = this.pos.z
+      object.userData = this.userData
       scene.add(object)
     }, function(xhr) {
       console.log(xhr)

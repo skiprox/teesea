@@ -13,6 +13,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 // COMPONENTS
 import Camera from 'Components/Camera'
 import Renderer from 'Components/Renderer'
+import Ray from 'Components/Ray'
 import SceneAmbientLight from 'Components/SceneAmbientLight'
 import SceneSpotLight from 'Components/SceneSpotLight'
 
@@ -38,7 +39,7 @@ const container = document.querySelector('#app')
 global.scene = new THREE.Scene()
 
 /* -------- CAMERA, RENDERER, RAYCASTER -------- */
-global.raycaster = new THREE.Raycaster()
+global.raycaster = new Ray(container);
 global.camera = new Camera()
 global.renderer = new Renderer({
   antialias: true,
@@ -89,7 +90,6 @@ let cube = new Cube({
 })
 
 /* -------- CREATE MODELS -------- */
-global.models = []
 let barn = new StandardModel({
   filename: './models/barn/barn_1.gltf',
   pos: {
@@ -117,7 +117,11 @@ let greenhouse = new StandardModel({
     y: 5.5,
     z: 5.5
   },
-  wireframe: false
+  wireframe: false,
+  userData: {
+    video: 'some_url_greenhouse.com',
+    description: 'Blah blah blah whatever greenhouse'
+  }
 })
 
 let cowhead = new StandardModel({
@@ -133,7 +137,11 @@ let cowhead = new StandardModel({
     y: 7,
     z: 7
   },
-  wireframe: false
+  wireframe: false,
+  userData: {
+    video: 'some_url_cowhead.com',
+    description: 'Blah blah blah whatever cow head'
+  }
 })
 
 let mootext = new StandardModel({
@@ -148,7 +156,11 @@ let mootext = new StandardModel({
     y:2,
     z:2
   },
-  wireframe: false
+  wireframe: false,
+  userData: {
+    video: 'some_url_moo.com',
+    description: 'Blah blah blah whatever moo text'
+  }
 })
 
 let cooler = new StandardModel({
@@ -163,20 +175,12 @@ let cooler = new StandardModel({
     y: 40,
     z: 40
   },
-  wireframe: false
-})
-
-/* ------ TRACK THE MOUSE ------ */
-const onClick = (e) => {
-  mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1
-  mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1
-  // find intersections
-  raycaster.setFromCamera(mouse, camera)
-  let intersects = raycaster.intersectObjects(scene.children, true)
-  if (intersects.length > 0) {
-    console.log('we have intersected', intersects[0].object)
+  wireframe: false,
+  userData: {
+    video: 'some_url_cooler.com',
+    description: 'Blah blah blah whatever cooler'
   }
-}
+})
 
 /* -------- START -------- */
 const init = () => {
@@ -209,14 +213,6 @@ const init = () => {
   barn.load()
   cooler.load()
   mootext.load()
-  models.push(greenhouse)
-  models.push(cowhead)
-  models.push(barn)
-  models.push(cooler)
-  models.push(mootext)
-
-  // --- add listeners ---
-  container.addEventListener('click', onClick, false)
 }
 init()
 
