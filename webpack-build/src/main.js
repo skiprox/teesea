@@ -164,16 +164,16 @@ let mootext = new StandardModel({
 })
 
 let cooler = new StandardModel({
-  filename: './models/cooler/cooler.gltf',
+  filename: './models/cooler/cooler-camo.gltf',
   pos: {
     x: -80,
     y: 10,
     z: -30
   },
   scale: {
-    x: 40,
-    y: 40,
-    z: 40
+    x: 0.1,
+    y: 0.1,
+    z: 0.1
   },
   wireframe: false,
   userData: {
